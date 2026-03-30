@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="/styles/new-message.css">
+    <title>New Message</title>
+</head>
+<body>
+    <form method="post" action="/new" class="new-message">
+    <h2>Create a New Mesage</h2>
+
+    <div class="authorship">
+        <label for="author"><p>What is your name?</p></label>
+        <input type="text" id="author" name="authorName">
+    </div>
+
+    <div class="message-text">
+        <label for="message"><p>What is your message?</p></label>
+        <input type="text" id="message" name="messageText">
+    </div>
+    
+    <br/>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
