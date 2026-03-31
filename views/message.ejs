@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Message</title>
+    <link rel="stylesheet" href="/styles/message.css">
+</head>
+<body>
+    <div class="container">
+    <div class="message-card">
+        <h2 class="message-heading"><%= message.textHeading %></h2>
+        <p class="message-user"><strong>By:</strong> <%= message.user %></p>
+        <p class="message-date"><strong>Added:</strong> <%= message.added %></p>
+        <div class="message-details">
+            <p><%= message.textDetails %></p>
+        </div>
+
+        <a href="/" class="back-link">← Back to Messages</a>
+
+        <!-- Delete form/button -->
+        <form action="/delete/<%= message.textId %>" method="post" style="display:inline;">
+            <button type="submit" class="delete-button">Delete Message</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

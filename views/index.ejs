@@ -11,7 +11,7 @@
     <p>This is the Mini Message Board Home-page</p>
     <br/>
 
-    <button><a href="/new">Add a New Message</a></button>
+    <button class="add-new-message"><a href="/new">Add a New Message</a></button>
     <br/>
 
     <div class="message-board">
@@ -19,8 +19,9 @@
             <% for (const message of messages) { %>
                 <li class="message">
                     <p><%= message.user %></p>
-                    <p><%= message.text %></p>
+                    <p><%= message.textHeading %></p>
                     <p><%= message.added %></p>
+                    <a href="/message/<%= message.textId %>" class="view-button">View Message</a>
                 </li>
             <% }%>
         </ul>

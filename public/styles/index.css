@@ -1,0 +1,122 @@
+/* Index page... */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eaeaea;
+    margin: 0;
+    padding: 2rem;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Page header */
+body > p:first-of-type {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+
+/* Add New Message button */
+.add-new-message {
+    display: block;
+    padding: 0.6rem 1.2rem;
+    margin: 1rem auto;
+    font-size: 1rem;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.add-new-message a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    text-align: center; 
+    padding: 0;
+}
+
+.add-new-message:hover {
+    background-color: #0056b3;
+}
+
+/* Message board container */
+.message-board {
+    max-width: 700px;
+    margin: 2rem auto;
+}
+
+/* Message list */
+.message-board ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Individual message card */
+.message {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Message details */
+.message p:first-child {
+    font-weight: 600;
+    color: #555;
+}
+
+.message p:nth-child(2) {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.message p:nth-child(3) {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.view-button {
+    display: inline-block;
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    margin-top: 0.5rem;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.view-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsiveness */
+@media (max-width: 600px) {
+    .message-board {
+        margin: 1rem;
+    }
+
+    .message {
+        padding: 1rem;
+    }
+
+    .add-new-message,
+    .view-button {
+        width: 100%;
+        text-align: center;
+    }
+}
