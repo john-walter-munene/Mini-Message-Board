@@ -1,4 +1,4 @@
-const { messages, messageIdentifier, getNextMessageId, setMessageIdentifier } = require('../messages');
+const { messages, getNextMessageId, setMessageIdentifier } = require('../messages');
 const CustomNotFoundError = require('../errors/CustomNotFoundError');
 
 // Get all the messages.
@@ -66,14 +66,16 @@ const deleteMessage = (req, res) => {
 
     const index = messages.findIndex(msg => msg.textId === id);
 
-    if (index === -1) throw new CustomNotFoundError ("Message not found");
+    if (index === -1) throw new CustomNotFoundError("Message not found");
 
-    // Remove the message, 
-    // Remap textIds to remain incremental starting from 1
-    // Reset the global messageIdentifier
     messages.splice(index, 1);
+
+    // Remap IDs
     messages.forEach((msg, idx) => msg.textId = idx + 1);
-    setMessageIdentifier();
+
+    // Reset global messageIdentifier to last message's ID
+    const newId = messages.length > 0 ? messages[messages.length - 1].textId : 0;
+    setMessageIdentifier(newId);
 
     res.redirect("/");
 };
