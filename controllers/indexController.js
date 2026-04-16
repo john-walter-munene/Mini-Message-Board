@@ -1,18 +1,31 @@
-const { messages, getNextMessageId, setMessageIdentifier } = require('../messages');
+const db = require('../db/queries');
 const CustomNotFoundError = require('../errors/CustomNotFoundError');
+const { body, validationResult, matchedData } = require('express-validator');
 
-// Get all the messages.
-const getMessages = (request, response) => {
-    const messagesInDB = [...messages];
+// User input validator.
+// Error messages.
+const authorNameErr = "must be two words, each with at least 3 characters";
+const messageHeadingErr = "must be at least two words and form a meaningful title";
+const messageDetailsErr = "must be at least 50 characters";
 
-    if (!messagesInDB) throw new CustomNotFoundError("No Messages Found!");
+// Form validator functions.
+const validateUser = [
+	body("authorName").trim().custom(value => {
+		const words = value.split(" ").filter(Boolean);
+		return words.length === 2 && words.every(word => word.length >= 3);
+	}).withMessage(`Author name: ${authorNameErr}`),
 
-    const formattedMessages = messagesInDB.map(message => ({...message, added: formatDate(message.added)}));
+	body("messageHeading").trim().custom(value => {
+		const words = value.split(" ").filter(Boolean);
+		// must have at least 2 words || 3+ words OR total length >= 10 characters
+		if (words.length < 2) return false;
+		return words.length >= 3 || value.length >= 10;
+	}).withMessage(`Message Heading: ${messageHeadingErr}`),
 
-    response.render("index", { messages: formattedMessages });
-}
+	body("messageDetails").trim().isLength({ min: 50, max: 200 }).withMessage(`Message: ${messageDetailsErr}`),
+];
 
-// Date formatter func
+// Date formatter helper function
 const formatDate = (date) => {
   return new Date(date).toLocaleString("en-GB", {
     weekday: "short",  // Mon, Tue...
@@ -26,56 +39,58 @@ const formatDate = (date) => {
   });
 };
 
+// Get all the messages.
+const getMessages = async (request, response) => {
+    const messagesInDB = await db.getAllMessages();
+
+    const formattedMessages = messagesInDB.map(message => ({...message, created_at: formatDate(message.created_at)}));
+    response.render("index", { messages: formattedMessages });
+}
+
 // Deliver a form to create new messages.
 const getMessageForm = (request, response) => {
-    response.render("form");
+    response.render("form", { errors: [], formData: {} });
 };
 
-const addNewMessage = (request, response) => {
-    const { authorName, messageHeading, messageDetails, } = request.body;
+const addNewMessage = [
+    validateUser, 
+    async (request, response) => {
+        // Handle validation to guide user
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            console.log(errors.array());
+            return response.status(400).render("form", { errors: errors.array(), formData: request.body });
+        }
 
-    const newMessage = {
-        user: authorName?.trim() || "Anonymous",
-        textHeading: messageHeading?.trim() || "No Title",
-        textDetails: messageDetails?.trim() || "",
-        added: new Date(),
-        textId: getNextMessageId(),
-    };
+        // Proceed to adding message in database
+        const { authorName, messageHeading, messageDetails, } = matchedData(request);
 
-    messages.push(newMessage);
-    response.redirect("/");
-};
+        const newMessage = { 
+            username: authorName,
+            title: messageHeading,
+            message: messageDetails,
+            created_at: new Date(),
+        };
+
+        await db.addNewMessage(newMessage);
+        response.redirect("/");
+    },
+];
 
 // Get a specific message
 const getSpecificMessage = async (request, response) => {
     const { messageId } = request.params;
-    const id = Number(messageId);
-    
-    const message = messages.find(message => message.textId === id);
 
+    const message = await db.getSpecificMessage(Number(messageId));
     if (!message) throw new CustomNotFoundError("Requested message not found");
     
-    const formattedMessage = { ...message, added: formatDate(message.added) };
-
+    const formattedMessage = { ...message, created_at: formatDate(message.created_at) };
     response.render("message", { message: formattedMessage });
 };
 
-const deleteMessage = (req, res) => {
+const deleteMessage = async (req, res) => {
     const { messageId } = req.params;
-    const id = Number(messageId);
-
-    const index = messages.findIndex(msg => msg.textId === id);
-
-    if (index === -1) throw new CustomNotFoundError("Message not found");
-
-    messages.splice(index, 1);
-
-    // Remap IDs
-    messages.forEach((msg, idx) => msg.textId = idx + 1);
-
-    // Reset global messageIdentifier to last message's ID
-    const newId = messages.length > 0 ? messages[messages.length - 1].textId : 0;
-    setMessageIdentifier(newId);
+    await db.deleteMessage(Number(messageId))
 
     res.redirect("/");
 };

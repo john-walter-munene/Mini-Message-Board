@@ -8,26 +8,28 @@
     <title>New Message</title>
 </head>
 <body>
+    <%- include("partials/errors.ejs") %>
+
     <form method="post" action="/new" class="new-message">
-    <h2>Create a New Mesage</h2>
+        <h2>Create a New Message</h2>
 
-    <div class="authorship">
-        <label for="author"><p>What is your name?</p></label>
-        <input type="text" id="author" name="authorName">
-    </div>
+        <div class="authorship">
+            <label for="author"><p>What is your name?</p></label>
+            <input type="text" id="author" name="authorName" value="<%= formData?.authorName || '' %>">
+        </div>
 
-    <div class="text-header">
-        <label for="message"><p>What is a short title for your message?</p></label>
-        <input type="text" id="message" name="messageHeading">
-    </div>
+        <div class="text-header">
+            <label for="message"><p>What is a short title for your message?</p></label>
+            <input type="text" id="message" name="messageHeading" value="<%= formData?.messageHeading || '' %>">
+        </div>
 
-    <div class="text-details">
-        <label for="message-details"><p>What is your message in full details?</p></label>
-        <textarea id="message-details" name="messageDetails"></textarea>
-    </div>
-    
-    <br/>
-    <button type="submit">Submit</button>
-</form>
+        <div class="text-details">
+            <label for="message-details"><p>What is your message in full details?</p></label>
+            <textarea id="message-details" name="messageDetails"><%= formData?.messageDetails || '' %></textarea>
+        </div>
+
+        <br/>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
