@@ -18,10 +18,10 @@
         <ul>
             <% for (const message of messages) { %>
                 <li class="message">
-                    <p><%= message.user %></p>
-                    <p><%= message.textHeading %></p>
-                    <p><%= message.added %></p>
-                    <a href="/message/<%= message.textId %>" class="view-button">View Message</a>
+                    <p><%= message.username %></p>
+                    <p><%= message.title %></p>
+                    <p><%= message.created_at %></p>
+                    <a href="/message/<%= message.id %>" class="view-button">View Message</a>
                 </li>
             <% }%>
         </ul>

@@ -1,0 +1,9 @@
+<% if (errors && errors.length) { %>
+  <div class="error-sidebar">
+    <ul class="error-list">
+      <% errors.forEach(function(error) { %>
+        <li><%= error.msg %></li>
+      <% }); %>
+    </ul>
+  </div>
+<% } %>

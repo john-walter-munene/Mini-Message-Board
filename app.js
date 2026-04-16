@@ -21,9 +21,10 @@ app.use("/", indexRouter);
 
 // Error handler
 app.use((error, request, response, next) => {
-    console.log(error);
-    response.status(error.statusCode).send(error.message);
-})
+	console.log(error);
+	const statusCode = error.statusCode || 500;
+	response.status(statusCode).send(error.message || "Internal Server Error");
+});
 
 const PORT = Number(process.env.PORT) || 3000;
 

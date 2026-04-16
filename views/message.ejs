@@ -9,17 +9,17 @@
 <body>
     <div class="container">
     <div class="message-card">
-        <h2 class="message-heading"><%= message.textHeading %></h2>
-        <p class="message-user"><strong>By:</strong> <%= message.user %></p>
-        <p class="message-date"><strong>Added:</strong> <%= message.added %></p>
+        <h2 class="message-heading"><%= message.title %></h2>
+        <p class="message-user"><strong>By:</strong> <%= message.username %></p>
+        <p class="message-date"><strong>Added:</strong> <%= message.created_at %></p>
         <div class="message-details">
-            <p><%= message.textDetails %></p>
+            <p><%= message.message %></p>
         </div>
 
         <a href="/" class="back-link">← Back to Messages</a>
 
         <!-- Delete form/button -->
-        <form action="/delete/<%= message.textId %>" method="post" style="display:inline;">
+        <form action="/delete/<%= message.id %>" method="post" style="display:inline;">
             <button type="submit" class="delete-button">Delete Message</button>
         </form>
     </div>
